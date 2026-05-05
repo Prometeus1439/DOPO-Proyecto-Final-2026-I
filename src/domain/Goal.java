@@ -1,5 +1,5 @@
 package domain;
 
-public class Goal extends Zone {
+public class Goal extends Zone implements Serializable{
 
 }

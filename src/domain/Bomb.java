@@ -1,5 +1,5 @@
 package domain;
 
-public class Bomb extends ScenarioItem {
+public class Bomb extends ScenarioItem implements Serializable{
 
 }

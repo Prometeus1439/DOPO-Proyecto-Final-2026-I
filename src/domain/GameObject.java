@@ -1,5 +1,5 @@
 package domain;
 
-public class GameObject {
+public class GameObject implements Serializable {
 
 }

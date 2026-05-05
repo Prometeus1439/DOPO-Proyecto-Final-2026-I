@@ -1,5 +1,6 @@
 package domain;
 
-public class Obstacle {
-
+public class Obstacle implements Serializable{
+	private Color color;
+	
 }

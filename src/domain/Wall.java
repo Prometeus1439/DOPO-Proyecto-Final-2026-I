@@ -1,5 +1,5 @@
 package domain;
 
-public class Wall extends ScenarioItem {
+public class Wall extends ScenarioItem implements Serializable{
 
 }

@@ -1,5 +1,5 @@
 package domain;
 
-public class Zone extends GameObject{
+public class Zone extends GameObject implements Serializable{
 
 }

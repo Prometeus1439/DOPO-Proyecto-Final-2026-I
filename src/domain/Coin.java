@@ -1,5 +1,5 @@
 package domain;
 
-public class Coin {
-
+public class Coin implements Serializable {
+	private Color color;
 }

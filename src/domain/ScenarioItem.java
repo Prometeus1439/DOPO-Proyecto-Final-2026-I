@@ -1,5 +1,5 @@
 package domain;
 
-public class ScenarioItem extends GameObject{
+public class ScenarioItem extends GameObject, implements Serializable{
 
 }

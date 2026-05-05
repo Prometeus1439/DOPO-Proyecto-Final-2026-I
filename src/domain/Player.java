@@ -2,7 +2,7 @@ package domain;
 
 import java.awt.Color;
 
-public abstract class Player extends GameObject{
+public abstract class Player extends GameObject implements Serializable{
 	
 	private int life = 1;
 	private double speed = 1.0;

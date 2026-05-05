@@ -1,5 +1,5 @@
 package domain;
 
-public class TypeV extends Obstacle {
+public class TypeV extends Obstacle implements Serializable{
 
 }

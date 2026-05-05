@@ -1,5 +1,5 @@
 package domain;
 
-public class YellowCoin extends Coin {
+public class YellowCoin extends Coin implements Serializable {
 
 }

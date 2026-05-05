@@ -1,5 +1,5 @@
 package domain;
 
-public class Basic extends Obstacle {
+public class Basic extends Obstacle implements Serializable {
 
 }

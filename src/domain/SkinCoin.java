@@ -1,5 +1,5 @@
 package domain;
 
-public class SkinCoin extends Coin {
+public class SkinCoin extends Coin implements Serializable {
 
 }

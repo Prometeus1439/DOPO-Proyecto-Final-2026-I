@@ -2,7 +2,7 @@ package domain;
 
 import java.awt.Color;
 
-public class RedSkin implements PlayerType{
+public class RedSkin implements PlayerType implements Serializable{
 	@Override
 	public void apply(Player player) {
 		player.setWidth(2);
