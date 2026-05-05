@@ -1,6 +1,7 @@
 package domain;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 public class GreenSkin implements PlayerType, Serializable{
 	@Override
