@@ -11,13 +11,13 @@ public abstract class Player extends GameObject implements Serializable{
 	private int width = 1;
 	private int height = 1;
 	private Rectangle hitbox;
-	
+	private int lives;
 	private Color currentColor;
 	private PlayerType originalType;
 	private PlayerType currentType;
-	
-	public Player(PlayerType type, int x, int y) {
-		super(x,y);
+	private int score;
+	public Player(PlayerType type, int x, int y, int width, int height) {
+		super(x,y, width, height);
 		originalType = type;
 		currentType = type;
 		applyCurrentType();
@@ -52,11 +52,28 @@ public abstract class Player extends GameObject implements Serializable{
 		this.speed = speed;
 	}
 	
+	public double getSpeed() {
+		return speed;
+	}
+	
 	public void setWidth(int width) {
 		this.width = width;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	
 	public void setHeight(int height) {
 		this.height = height;
+	}
+	public int getX() {
+		return hitbox.x;
+	}
+	public int getY() {
+		return hitbox.y;
 	}
 }
