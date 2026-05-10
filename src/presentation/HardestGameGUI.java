@@ -13,7 +13,7 @@ public class HardestGameGUI extends JFrame {
 	// instance variables - replace the example below with your own
     private HGame hardestGame;
     
-    // Menú
+    // Menï¿½
     private JMenuBar menuBarHardestGame;
     private JMenu menuHardestGame;
     private JMenuItem menuItemPause;
@@ -24,7 +24,7 @@ public class HardestGameGUI extends JFrame {
     // Panel principal
     private JPanel mainPanel;
     
-    //Múltiples elementos en el juego
+    //Mï¿½ltiples elementos en el juego
     private CardLayout cardLayout;
     
     //Pantallas
@@ -51,7 +51,6 @@ public class HardestGameGUI extends JFrame {
     
     //Botones
     private JButton playGameButton;
-    private JButton leaderBoardButton;
     private JButton mainMenuToInstructionsButton;
     private JButton instructionsToMainMenuButton;
     private JButton instructionsToPlayButton;
@@ -71,6 +70,7 @@ public class HardestGameGUI extends JFrame {
     
     public static void main(String[] args){
         HardestGameGUI gui = new HardestGameGUI();
+        HGame hardestGame= new HGame();
         gui.setVisible(true);
     }
     
@@ -82,14 +82,18 @@ public class HardestGameGUI extends JFrame {
         JPanel buttonsPanel = new JPanel(new GridLayout(2,1,10,10));
         
         playGameButton = new JButton("PLAY GAME");
-        leaderBoardButton = new JButton("LEADER BOARD");
-        
         buttonsPanel.add(playGameButton);
-        buttonsPanel.add(leaderBoardButton);
         
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBorder(BorderFactory.createEmptyBorder(40, 150, 40, 150));
         centerPanel.add(buttonsPanel, BorderLayout.CENTER);
+        
+        JButton btnNewButton_1 = new JButton("SETTINGS");
+        btnNewButton_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        buttonsPanel.add(btnNewButton_1);
         
         welcomePanel.add(titlePanel, BorderLayout.NORTH);
         welcomePanel.add(centerPanel, BorderLayout.CENTER);
@@ -97,20 +101,12 @@ public class HardestGameGUI extends JFrame {
     
     private JPanel prepareAreaTitle(){
     	JPanel panel = new JPanel(new BorderLayout());
-    	
-    	JLabel topLabel = new JLabel("The DOPO...", JLabel.LEFT);
-        JLabel centerLabel = new JLabel("Hardest Game", JLabel.CENTER);
+        JLabel centerLabel = new JLabel("DOPO Hardest Game", JLabel.CENTER);
         JLabel versionLabel = new JLabel("Version 1.0", JLabel.RIGHT);
-        
-        topLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        centerLabel.setFont(new Font("Arial Black", Font.BOLD, 60));
+        centerLabel.setFont(new Font("Century Gothic", Font.BOLD, 60));
         versionLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        
-        topLabel.setForeground(Color.BLACK);
         centerLabel.setForeground(Color.BLUE);
         versionLabel.setForeground(Color.BLACK);
-        
-        panel.add(topLabel, BorderLayout.NORTH);
         panel.add(centerLabel, BorderLayout.CENTER);
         panel.add(versionLabel, BorderLayout.SOUTH);
         
@@ -120,7 +116,7 @@ public class HardestGameGUI extends JFrame {
     private void exit(){
         int result = JOptionPane.showConfirmDialog(
             this,
-            "¿Estás seguro de salir del programa?",
+            "ï¿½Estï¿½s seguro de salir del programa?",
             "Salir de The DOPO Hardest Game",
             JOptionPane.YES_NO_OPTION
         );
@@ -145,12 +141,6 @@ public class HardestGameGUI extends JFrame {
         playGameButton.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e) {
         		cardLayout.show(mainPanel, "INSTRUCTIONS");
-        	}
-        });
-        
-        leaderBoardButton.addActionListener(new ActionListener(){
-        	public void actionPerformed(ActionEvent e) {
-        		cardLayout.show(mainPanel, "LEADERBOARD");
         	}
         });
         
@@ -244,6 +234,7 @@ public class HardestGameGUI extends JFrame {
         
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension screen = tk.getScreenSize();
+        //GamePanel gamePanel= new GamePanel(hardestGame.getActualLevel(), hardestGame.getPlayers());
         
         setSize(screen.width/2, screen.height/2);
         setLocationRelativeTo(null);
@@ -259,8 +250,9 @@ public class HardestGameGUI extends JFrame {
         mainPanel.add(welcomePanel, "WELCOME");
         mainPanel.add(instructionsPanel, "INSTRUCTIONS");
         mainPanel.add(leaderboardPanel, "LEADERBOARD");
+        mainPanel.add(gamePanel, "GAME");
 
-        add(mainPanel);
+        getContentPane().add(mainPanel);
 
         cardLayout.show(mainPanel, "WELCOME");
     }

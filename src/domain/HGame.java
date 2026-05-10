@@ -5,9 +5,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class HGame implements Serializable {
- private int difficult;
  private ArrayList<Player> players;
  private ArrayList<Level> levels;
+ private Level actualLevel;
  
  public void move(char direction, int player) {
 	 int dx = 0;
@@ -41,6 +41,9 @@ public class HGame implements Serializable {
 	                p.getWidth(),
 	                p.getHeight()
 	            );
+	    if(actualLevel.isWall(future)) {
+	    	p.move( direction);
+	    }
 
 	 
  }
@@ -54,9 +57,18 @@ public class HGame implements Serializable {
 	 }
 	 players.add(p);
  }
- 
+ public void tictac() {
+	 for(Player p: players)
+	 actualLevel.checkZone(p);
+ }
  public void level1() {
 	 
+	 
  }
- 
+ public Level getActualLevel(){
+	 return actualLevel;
+ }
+ public ArrayList<Player> getPlayers(){
+	 return players;
+ }
 }

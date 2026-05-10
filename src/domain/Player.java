@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public abstract class Player extends GameObject implements Serializable{
 	
+	private int xRespawn;
+	private int yRespawn;
 	private int life = 1;
 	private double speed = 1.0;
 	private int width = 1;
@@ -15,7 +17,9 @@ public abstract class Player extends GameObject implements Serializable{
 	private Color currentColor;
 	private PlayerType originalType;
 	private PlayerType currentType;
+	private boolean inmunne;
 	private int score;
+	private boolean finished;
 	public Player(PlayerType type, int x, int y, int width, int height) {
 		super(x,y, width, height);
 		originalType = type;
@@ -75,5 +79,29 @@ public abstract class Player extends GameObject implements Serializable{
 	}
 	public int getY() {
 		return hitbox.y;
+	}
+	public void setInmune (boolean inm) {
+		inmunne=inm;
+	}
+	public void setFinished(boolean finished) {
+		this.finished=finished;
+	}
+	public Rectangle getHitbox() {
+		return hitbox;
+	}
+	public  void setRespawnX(int x) {
+		xRespawn=x;
+	}
+	public  void setRespawnY(int y) {
+		yRespawn=y;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int s) {
+		score=s;
+	}
+	public int getLife() {
+		return life;
 	}
 }
