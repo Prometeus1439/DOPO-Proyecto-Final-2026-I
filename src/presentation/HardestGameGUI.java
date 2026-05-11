@@ -10,8 +10,10 @@ import java.io.File;
 import domain.*;
 
 public class HardestGameGUI extends JFrame {
-	// instance variables - replace the example below with your own
+
     private HGame hardestGame;
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
     
     // Menï¿½
     private JMenuBar menuBarHardestGame;
@@ -21,21 +23,15 @@ public class HardestGameGUI extends JFrame {
     private JMenuItem menuItemSave;
     private JMenuItem menuItemLoad;
     
-    // Panel principal
-    private JPanel mainPanel;
-    
-    //Mï¿½ltiples elementos en el juego
-    private CardLayout cardLayout;
     
     //Pantallas
-    private JPanel welcomePanel;
-    private JPanel leaderboardPanel;
-    private JPanel instructionsPanel;
-    private JPanel gamePanel;
-    private JPanel boardPanel;
-    private JPanel infoPanel;
-    private JPanel levelMessagePanel;
-    private JPanel saveScorePanel;
+    private WelcomePanel welcomePanel;
+    private SettingsPanel settingsPanel;
+    private ModeSelectionPanel selectionModePanel;
+    private InstructionsPanel instructionsPanel;
+    private CharacterSelectionPanel selectionCharacterPanel;
+    private GamePanel gamePanel;
+    
     
     //Etiquetas
     private JLabel titleLabel;
@@ -64,6 +60,7 @@ public class HardestGameGUI extends JFrame {
     
     
     private HardestGameGUI(){
+    	hardestGame = new HGame();
         prepareElements();
         prepareActions();
     }
@@ -72,161 +69,6 @@ public class HardestGameGUI extends JFrame {
         HardestGameGUI gui = new HardestGameGUI();
         HGame hardestGame= new HGame();
         gui.setVisible(true);
-    }
-    
-    private void prepareElementsWelcomePanel(){
-        welcomePanel = new JPanel(new BorderLayout());
-        
-        JPanel titlePanel = prepareAreaTitle();
-        
-        JPanel buttonsPanel = new JPanel(new GridLayout(2,1,10,10));
-        
-        playGameButton = new JButton("PLAY GAME");
-        buttonsPanel.add(playGameButton);
-        
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(40, 150, 40, 150));
-        centerPanel.add(buttonsPanel, BorderLayout.CENTER);
-        
-        JButton btnNewButton_1 = new JButton("SETTINGS");
-        btnNewButton_1.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
-        });
-        buttonsPanel.add(btnNewButton_1);
-        
-        welcomePanel.add(titlePanel, BorderLayout.NORTH);
-        welcomePanel.add(centerPanel, BorderLayout.CENTER);
-    }
-    
-    private JPanel prepareAreaTitle(){
-    	JPanel panel = new JPanel(new BorderLayout());
-        JLabel centerLabel = new JLabel("DOPO Hardest Game", JLabel.CENTER);
-        JLabel versionLabel = new JLabel("Version 1.0", JLabel.RIGHT);
-        centerLabel.setFont(new Font("Century Gothic", Font.BOLD, 60));
-        versionLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        centerLabel.setForeground(Color.BLUE);
-        versionLabel.setForeground(Color.BLACK);
-        panel.add(centerLabel, BorderLayout.CENTER);
-        panel.add(versionLabel, BorderLayout.SOUTH);
-        
-        return panel;
-    }
-    
-    private void exit(){
-        int result = JOptionPane.showConfirmDialog(
-            this,
-            "ï¿½Estï¿½s seguro de salir del programa?",
-            "Salir de The DOPO Hardest Game",
-            JOptionPane.YES_NO_OPTION
-        );
-    
-        if(result == JOptionPane.YES_OPTION){
-            setVisible(false);
-            System.exit(0);
-        }
-        else{
-            requestFocusInWindow();
-        }
-    }
-    
-    private void prepareActions(){
-        addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e){
-                exit();
-            }
-        });
-        
-        
-        playGameButton.addActionListener(new ActionListener(){
-        	public void actionPerformed(ActionEvent e) {
-        		cardLayout.show(mainPanel, "INSTRUCTIONS");
-        	}
-        });
-        
-        instructionsToMainMenuButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                cardLayout.show(mainPanel, "WELCOME");
-            }
-        });
-
-        leaderboardToMainMenuButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                cardLayout.show(mainPanel, "WELCOME");
-            }
-        });
-        
-        instructionsToPlayButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(
-                    HardestGameGUI.this,
-                    "Game screen under construction"
-                );
-            }
-        });
-    } 
-    
-    
-    private void prepareElementsInstructionsPanel(){
-
-        instructionsPanel = new JPanel(new BorderLayout());
-
-        JLabel title = new JLabel("INSTRUCTIONS", JLabel.CENTER);
-        title.setFont(new Font("Arial Black", Font.BOLD, 28));
-
-        JTextArea text = new JTextArea(
-            "Objective:\n" +
-            "Avoid enemies, collect all coins and reach the goal.\n\n" +
-            "Controls:\n" +
-            "Use arrow keys or WASD.\n\n" +
-            "Tips:\n" +
-            "- Touching enemies returns you.\n" +
-            "- Coins may change your powers.\n" +
-            "- Be patient."
-        );
-
-        text.setEditable(false);
-        text.setFont(new Font("Arial", Font.PLAIN, 18));
-        text.setBackground(instructionsPanel.getBackground());
-        
-        text.setLineWrap(true);
-        text.setWrapStyleWord(true);
-
-        instructionsToMainMenuButton = new JButton("MENU");
-        instructionsToPlayButton = new JButton("PLAY");
-
-        JPanel buttons = new JPanel(new GridLayout(1,2,10,10));
-        buttons.add(instructionsToMainMenuButton);
-        buttons.add(instructionsToPlayButton);
-
-        instructionsPanel.add(title, BorderLayout.NORTH);
-        instructionsPanel.add(text, BorderLayout.CENTER);
-        instructionsPanel.add(buttons, BorderLayout.SOUTH);
-    }
-    
-    private void prepareElementsLeaderboardPanel(){
-
-        leaderboardPanel = new JPanel(new BorderLayout());
-
-        JLabel title = new JLabel("LEADERBOARD", JLabel.CENTER);
-        title.setFont(new Font("Arial Black", Font.BOLD, 28));
-
-        JLabel scores = new JLabel(
-            "<html><center>" +
-            "1. JUAN - 2 deaths<br><br>" +
-            "2. ANA - 4 deaths<br><br>" +
-            "3. CARLOS - 7 deaths" +
-            "</center></html>",
-            JLabel.CENTER
-        );
-
-        scores.setFont(new Font("Arial", Font.PLAIN, 22));
-
-        leaderboardToMainMenuButton = new JButton("BACK");
-
-        leaderboardPanel.add(title, BorderLayout.NORTH);
-        leaderboardPanel.add(scores, BorderLayout.CENTER);
-        leaderboardPanel.add(leaderboardToMainMenuButton, BorderLayout.SOUTH);
     }
     
     private void prepareElements(){
@@ -243,18 +85,71 @@ public class HardestGameGUI extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         
-        prepareElementsWelcomePanel();
-        prepareElementsInstructionsPanel();
-        prepareElementsLeaderboardPanel();
+        welcomePanel = new WelcomePanel();
+        settingsPanel = new SettingsPanel();
+        selectionModePanel = new ModeSelectionPanel();
+        instructionsPanel = new InstructionsPanel();
+        selectionCharacterPanel = new CharacterSelectionPanel();
+        gamePanel = new GamePanel();
         
         mainPanel.add(welcomePanel, "WELCOME");
+        mainPanel.add(settingsPanel, "SETTINGS");
+        mainPanel.add(selectionModePanel, "MODE");
         mainPanel.add(instructionsPanel, "INSTRUCTIONS");
-        mainPanel.add(leaderboardPanel, "LEADERBOARD");
+        mainPanel.add(selectionCharacterPanel, "CHARACTER");
         mainPanel.add(gamePanel, "GAME");
 
         getContentPane().add(mainPanel);
 
         cardLayout.show(mainPanel, "WELCOME");
+    }
+    
+    private void prepareActions(){
+        addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                exit();
+            }
+        });
+        
+        welcomePanel.getPlayButton().addActionListener(e -> showPanel("MODE"));
+        welcomePanel.getSettingsButton().addActionListener(e -> showPanel("SETTINGS"));
+
+        settingsPanel.getBackButton().addActionListener(e -> showPanel("WELCOME"));
+        settingsPanel.getVolumeMinusButton().addActionListener(e -> settingsPanel.decreaseVolume());
+        settingsPanel.getVolumePlusButton().addActionListener(e -> settingsPanel.increaseVolume());
+        
+        selectionModePanel.getNormalButton().addActionListener(e -> {instructionsPanel.showNormalInstructions();showPanel("INSTRUCTIONS");});
+        selectionModePanel.getPvpButton().addActionListener(e -> {instructionsPanel.showPvpInstructions();showPanel("INSTRUCTIONS");});
+        selectionModePanel.getPvmButton().addActionListener(e -> {instructionsPanel.showPvmInstructions();showPanel("INSTRUCTIONS");});
+
+        instructionsPanel.getBackButton().addActionListener(e -> showPanel("MODE"));
+        instructionsPanel.getPlayButton().addActionListener(e -> showPanel("CHARACTER"));
+
+        selectionCharacterPanel.getCharacterOneButton().addActionListener(e -> showPanel("GAME"));
+        selectionCharacterPanel.getCharacterTwoButton().addActionListener(e -> showPanel("GAME"));
+        selectionCharacterPanel.getCharacterThreeButton().addActionListener(e -> showPanel("GAME"));
+        selectionCharacterPanel.getBackButton().addActionListener(e -> showPanel("INSTRUCTIONS"));
+    } 
+    
+    private void showPanel(String name) {
+    	cardLayout.show(mainPanel, name);
+    }
+    
+    private void exit(){
+        int result = JOptionPane.showConfirmDialog(
+            this,
+            "¿Estás seguro de salir del programa?",
+            "Salir de The DOPO Hardest Game",
+            JOptionPane.YES_NO_OPTION
+        );
+    
+        if(result == JOptionPane.YES_OPTION){
+            setVisible(false);
+            System.exit(0);
+        }
+        else{
+            requestFocusInWindow();
+        }
     }
     
 }
