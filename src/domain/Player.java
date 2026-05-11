@@ -104,4 +104,10 @@ public abstract class Player extends GameObject implements Serializable{
 	public int getLife() {
 		return life;
 	}
+	public int getRespawnX() {
+		return xRespawn;
+	}
+	public int getRespawnY() {
+		return yRespawn;
+	}
 }

@@ -10,6 +10,11 @@ public class Level implements Serializable {
 	private ArrayList<Thing> things;
 	private ArrayList<Wall> walls;
 	
+	public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things) {
+		this.walls=walls;
+		this.zones=zones;
+		this.things=things;
+	}
 	public boolean isWall(Rectangle ghost) {
 		for(Wall w: walls) {
 			if(ghost.intersects(w.hitbox)) {
@@ -28,6 +33,20 @@ public class Level implements Serializable {
 			}
 		}
 	}
+	public void checkThing(Player p) {
+		for(Thing t: things) {
+			if(p.getHitbox().intersects(t.hitbox)) {
+				t.touch(p);
+			}
+		}
+	}
+	public void checkScenarioItems(Player p) {
+		for(ScenarioItem s: scenarioItems) {
+			if(p.getHitbox().intersects(s.hitbox)) {
+				s.effect(p);
+			}
+		}
+	}
 	public void finish() {
 	}
 	public ArrayList<Wall> getWalls(){
@@ -35,5 +54,8 @@ public class Level implements Serializable {
 	}
 	public ArrayList<Thing>getThings(){
 		return things;
+	}
+	public ArrayList<ScenarioItem> getScenarioItems(){
+		return scenarioItems;
 	}
 }
