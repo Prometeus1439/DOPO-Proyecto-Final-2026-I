@@ -6,4 +6,7 @@ public class Bomb extends ScenarioItem implements Serializable{
 	public Bomb(int x, int y, int width, int height) {
 		super(x,y,width, height);
 	}
+	public void effect(Player p) {
+		p.setLife(0);
+	}
 }
