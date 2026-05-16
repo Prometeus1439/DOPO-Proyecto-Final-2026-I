@@ -3,7 +3,7 @@ package presentation;
 import java.awt.*;
 import javax.swing.*;
 
-public class CharacterSelectionPanel extends JPanel {
+public class CharacterSelectionPanel extends GameScreenPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -13,22 +13,27 @@ public class CharacterSelectionPanel extends JPanel {
     private JButton backButton;
 
     public CharacterSelectionPanel() {
+    	super(new BorderLayout());
         prepareElements();
     }
 
     private void prepareElements() {
-        setLayout(new BorderLayout());
-
         JLabel title = new JLabel("SELECT CHARACTER", JLabel.CENTER);
-        title.setFont(new Font("Arial Black", Font.BOLD, 32));
+        GUIStyle.styleTitle(title);
 
-        characterOneButton = new JButton("CHARACTER 1 - NORMAL");
-        characterTwoButton = new JButton("CHARACTER 2 - MORE LIFE");
-        characterThreeButton = new JButton("CHARACTER 3 - SMALLER AND FASTER");
+        characterOneButton = new JButton("<html><center>RED<br>NORMAL</center></html>");
+        characterTwoButton = new JButton("<html><center>GREEN<br>EXTRA LIFE</center></html>");
+        characterThreeButton = new JButton("<html><center>BLUE<br>FAST & SMALL</center></html>");
+        
         backButton = new JButton("BACK");
 
-        JPanel buttonsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(100, 250, 100, 250));
+        GUIStyle.styleMenuButton(characterOneButton,GUIStyle.RED,new Color(255, 120, 120));
+        GUIStyle.styleMenuButton(characterTwoButton,GUIStyle.GREEN,new Color(120, 255, 180));
+        GUIStyle.styleMenuButton(characterThreeButton,GUIStyle.BLUE,new Color(120, 200, 255));
+        GUIStyle.styleMenuButton(backButton,GUIStyle.ORANGE,new Color(255, 220, 120));
+        
+        JPanel buttonsPanel = new GameScreenPanel(new GridLayout(4, 1, 10, 10));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(80, 250, 80, 250));
 
         buttonsPanel.add(characterOneButton);
         buttonsPanel.add(characterTwoButton);
