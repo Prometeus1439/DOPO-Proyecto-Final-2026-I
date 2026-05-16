@@ -10,8 +10,8 @@ public abstract class Player extends GameObject implements Serializable{
 	private int yRespawn;
 	private int life = 1;
 	private double speed = 1.0;
-	private int width = 1;
-	private int height = 1;
+	private int width;
+	private int height;
 	private Rectangle hitbox;
 	private int lives;
 	private Color currentColor;
@@ -20,15 +20,22 @@ public abstract class Player extends GameObject implements Serializable{
 	private boolean inmunne;
 	private int score;
 	private boolean finished;
+	
 	public Player(PlayerType type, int x, int y, int width, int height) {
 		super(x,y, width, height);
 		originalType = type;
 		currentType = type;
 		applyCurrentType();
+		this.width = width;
+		this.height = height;
 	}
-	public void move(char dir) {
-		
+	
+	public void move(Rectangle newHitbox) {
+		//hitbox = newHitbox;
+		this.x = (int) newHitbox.getX();
+		this.y = (int) newHitbox.getY();
 	}
+	
 	public void changeType(PlayerType type) {
 		currentType = type;
 		applyCurrentType();

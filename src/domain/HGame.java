@@ -63,8 +63,8 @@ public class HGame implements Serializable {
 	    
 	 Rectangle future = new Rectangle(p.getX()+ dx, p.getY() + dy, p.getWidth(), p.getHeight());
 	 
-	 if(actualLevel.isWall(future)) {
-		 p.move( direction);
+	 if(!actualLevel.isWall(future)) {
+		 p.move(future);
 	 }
 	 
  }
@@ -73,11 +73,11 @@ public class HGame implements Serializable {
 	 Player p = null;
 	 
 	 if(controlType.equals("human")) {
-		 p = new HumanPlayer(pType,1,1,1,1);
+		 p = new HumanPlayer(pType,1,1,20,20);
 	 }
 	 
 	 else if (controlType.equals("machine")) {
-		 p= new MachinePlayer(pType,1,1,1,1);
+		 p= new MachinePlayer(pType,1,1,20,20);
 	 }
 	 
 	 if(p != null) {
@@ -104,7 +104,7 @@ public class HGame implements Serializable {
 	    ArrayList<Zone> zones= new ArrayList<>();
 	    ArrayList<Thing> things= new ArrayList<>();
 
-	    int size = 100;	
+	    int size = 500;	
 	    int thickness = 5;
 
 	    walls.add(new Wall(0, 0, thickness, size));
@@ -125,11 +125,11 @@ public class HGame implements Serializable {
 	    things.add(coin);
 	    
 	    for(Player p: players) {
-	    	p.setRespawnX(20);
-	    	p.setRespawnY(100);
+	    	p.setX(20);
+	    	p.setY(100);
 	    }
 	    
-	    actualLevel = new Level(walls, zones, things);
+	    actualLevel = new Level(walls, zones, things, size, size);
 	    levels.add(actualLevel);
 }
  

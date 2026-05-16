@@ -3,8 +3,9 @@ package presentation;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import domain.HGame;
+import domain.*;
 import javax.swing.Timer;
+import java.util.*;
 
 public class GamePanel extends GameScreenPanel {
 
@@ -30,6 +31,7 @@ public class GamePanel extends GameScreenPanel {
     
     public GamePanel(HGame hardestGame) {
     	super(new BorderLayout());
+    	
     	
     	this.hardestGame = hardestGame;
     	this.gameMode = "NORMAL";
@@ -97,11 +99,54 @@ public class GamePanel extends GameScreenPanel {
 
     private void prepareCenterPanel() {
 
-        centerPanel = new JPanel();
-
-        centerPanel.setBackground(
-            new Color(210, 210, 255)
-        );
+        centerPanel = new JPanel() {
+        		@Override
+        		protected void paintComponent(Graphics g) { 
+        			super.paintComponent(g);
+        			drawWalls(g);
+        			drawPlayer(g);
+        		}
+        };
+        
+        centerPanel.setBackground(new Color(210, 210, 255));
+    }
+    
+    private void drawWalls(Graphics g) {
+    	ArrayList<Wall> walls = hardestGame.getActualLevel().getWalls();
+    	g.setColor(Color.BLACK);
+    	
+    	int panelW = centerPanel.getWidth();
+    	int panelH = centerPanel.getHeight();
+    	
+    	int levelW = hardestGame.getActualLevel().getWidth();
+    	int levelH = hardestGame.getActualLevel().getHeight();
+    	
+    	for(Wall wall : walls) {
+    		int height = wall.getHitbox().height;
+    		int width = wall.getHitbox().width;
+    		int x = wall.getX() + (int)(panelW/2) - (int)(levelW/2);
+    		int y = wall.getY() + (int)(panelH/2) - (int)(levelH/2);
+    		g.fillRect(x, y, width, height);
+    	}
+    }
+    
+    private void drawPlayer(Graphics g) {
+    	ArrayList<Player> players = hardestGame.getPlayers();
+    	
+    	int panelW = centerPanel.getWidth();
+    	int panelH = centerPanel.getHeight();
+    	
+    	int levelW = hardestGame.getActualLevel().getWidth();
+    	int levelH = hardestGame.getActualLevel().getHeight();
+    	
+    	for(Player player : players) {
+    		int height =  player.getHeight();
+    		int width = player.getWidth();
+    		int x = player.getX() + (int)(panelW/2) - (int)(levelW/2);
+    		int y = player.getY() + (int)(panelH/2) - (int)(levelH/2);
+    		g.setColor(player.getCurrentType().getColor());
+    		g.fillRect(x, y, width, height);
+    	}
     }
 
     private void prepareBottomPanel() {
@@ -159,13 +204,9 @@ public class GamePanel extends GameScreenPanel {
         });
 
         saveItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Save feature in development"));
-
         loadItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Load feature in development"));
-
         volumeUpItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Volume increased"));
-
         volumeDownItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Volume decreased"));
-
         quitItem.addActionListener(e -> System.exit(0));
         
     }
@@ -210,21 +251,25 @@ public class GamePanel extends GameScreenPanel {
     	switch(key) {
     		case KeyEvent.VK_W:
     		case KeyEvent.VK_UP:
+    			System.out.println("W");
     			hardestGame.move('W', 0);
     			break;
     		
     		case KeyEvent.VK_S:
     		case KeyEvent.VK_DOWN:
+    			System.out.println("S");
     			hardestGame.move('S', 0);
     			break;
     			
     		case KeyEvent.VK_A:
     		case KeyEvent.VK_LEFT:
+    			System.out.println("A");
     			hardestGame.move('A', 0);
     			break;
     		
     		case KeyEvent.VK_D:
     		case KeyEvent.VK_RIGHT:
+    			System.out.println("D");
     			hardestGame.move('D', 0);
     			break;
     	}

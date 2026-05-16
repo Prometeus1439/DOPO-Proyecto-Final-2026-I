@@ -6,8 +6,8 @@ import java.io.Serializable;
 public class RedSkin implements PlayerType, Serializable{
 	@Override
 	public void apply(Player player) {
-		player.setWidth(2);
-		player.setWidth(2);
+		player.setWidth(20);
+		player.setWidth(20);
 	}
 	
 	@Override

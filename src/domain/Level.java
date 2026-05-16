@@ -9,11 +9,15 @@ public class Level implements Serializable {
 	private ArrayList<Zone> zones;
 	private ArrayList<Thing> things;
 	private ArrayList<Wall> walls;
+	private static int width;
+	private static int height;
 	
-	public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things) {
+	public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things, int width, int height) {
 		this.walls=walls;
 		this.zones=zones;
 		this.things=things;
+		this.width = width;
+		this.height = height;
 	}
 	public boolean isWall(Rectangle ghost) {
 		for(Wall w: walls) {
@@ -57,5 +61,13 @@ public class Level implements Serializable {
 	}
 	public ArrayList<ScenarioItem> getScenarioItems(){
 		return scenarioItems;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int getWidth() {
+		return width;
 	}
 }
