@@ -13,6 +13,9 @@ public class HardestGameGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private String selectedMode;
+    private PlayerType playerOneType;
+    private PlayerType playerTwoType;
+    private int selectingPlayer;
     
     //Pantallas
     private WelcomePanel welcomePanel;
@@ -100,11 +103,23 @@ public class HardestGameGUI extends JFrame {
         selectionModePanel.getBackButton().addActionListener(e -> showPanel("WELCOME"));
 
         instructionsPanel.getBackButton().addActionListener(e -> showPanel("MODE"));
-        instructionsPanel.getPlayButton().addActionListener(e -> showPanel("CHARACTER"));
+        instructionsPanel.getPlayButton().addActionListener(e -> {
 
-        selectionCharacterPanel.getCharacterOneButton().addActionListener(e -> startGameWithCharacter(new RedSkin()));
-        selectionCharacterPanel.getCharacterTwoButton().addActionListener(e -> startGameWithCharacter(new GreenSkin()));
-        selectionCharacterPanel.getCharacterThreeButton().addActionListener(e -> startGameWithCharacter(new BlueSkin()));
+            selectingPlayer = 1;
+
+            if(selectedMode.equals("NORMAL")) {
+                selectionCharacterPanel.showSinglePlayerSelection();
+            }
+            else {
+                selectionCharacterPanel.showPlayerOneSelection();
+            }
+
+            showPanel("CHARACTER");
+        });
+
+        selectionCharacterPanel.getCharacterOneButton().addActionListener(e -> selectCharacter(new RedSkin()));
+        selectionCharacterPanel.getCharacterTwoButton().addActionListener(e -> selectCharacter(new GreenSkin()));
+        selectionCharacterPanel.getCharacterThreeButton().addActionListener(e -> selectCharacter(new BlueSkin()));
         selectionCharacterPanel.getBackButton().addActionListener(e -> showPanel("INSTRUCTIONS"));
         
         gamePanel.setExitToMainMenuAction(() -> showPanel("WELCOME"));
@@ -136,9 +151,33 @@ public class HardestGameGUI extends JFrame {
         }
     }
     
-    private void startGameWithCharacter(PlayerType playerType) {
-        hardestGame.startGame(selectedMode, playerType);
-        showPanel("GAME");
+    private void selectCharacter(PlayerType type) {
+
+        if(selectedMode.equals("PVP") || selectedMode.equals("PVM")) {
+
+            if(selectingPlayer == 1) {
+                playerOneType = type;
+                selectingPlayer = 2;
+
+                if(selectedMode.equals("PVP")) {
+                    selectionCharacterPanel.showPlayerTwoSelection();
+                }
+                else {
+                    selectionCharacterPanel.showMachineSelection();
+                }
+
+                showPanel("CHARACTER");
+            }
+            else {
+                playerTwoType = type;
+                hardestGame.startGame(selectedMode, playerOneType, playerTwoType);
+                showPanel("GAME");
+            }
+        }
+        else {
+            hardestGame.startGame(selectedMode, type);
+            showPanel("GAME");
+        }
     }
     
 }

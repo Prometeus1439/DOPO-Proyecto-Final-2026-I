@@ -11,6 +11,8 @@ public class CharacterSelectionPanel extends GameScreenPanel {
     private JButton characterTwoButton;
     private JButton characterThreeButton;
     private JButton backButton;
+    
+    private JLabel title;
 
     public CharacterSelectionPanel() {
     	super(new BorderLayout());
@@ -18,7 +20,7 @@ public class CharacterSelectionPanel extends GameScreenPanel {
     }
 
     private void prepareElements() {
-        JLabel title = new JLabel("SELECT CHARACTER", JLabel.CENTER);
+    	title = new JLabel("SELECT CHARACTER", JLabel.CENTER);
         GUIStyle.styleTitle(title);
 
         characterOneButton = new JButton("<html><center>RED<br>NORMAL</center></html>");
@@ -44,6 +46,22 @@ public class CharacterSelectionPanel extends GameScreenPanel {
         add(buttonsPanel, BorderLayout.CENTER);
     }
 
+    public void showSinglePlayerSelection() {
+        title.setText("SELECT PLAYER");
+    }
+
+    public void showPlayerOneSelection() {
+        title.setText("SELECT PLAYER 1");
+    }
+
+    public void showPlayerTwoSelection() {
+        title.setText("SELECT PLAYER 2");
+    }
+
+    public void showMachineSelection() {
+        title.setText("SELECT MACHINE TYPE");
+    }
+    
     public JButton getCharacterOneButton() {
         return characterOneButton;
     }

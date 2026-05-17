@@ -11,7 +11,7 @@ public class ModeSelectionPanel extends GameScreenPanel {
     private JButton pvpButton;
     private JButton pvmButton;
     private JButton backButton;
-
+    
     public ModeSelectionPanel() {
     	super(new BorderLayout());
         prepareElements();
