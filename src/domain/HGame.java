@@ -135,57 +135,61 @@ public int getPlayerScore(int index) {
 	return players.get(index).getScore();
 }
  
- public void level1() {
+public void level1() {
 
-     ArrayList<Wall> walls = new ArrayList<>();
-     ArrayList<Zone> zones= new ArrayList<>();
-     ArrayList<Thing> things= new ArrayList<>();
+    ArrayList<Wall> walls = new ArrayList<>();
+    ArrayList<Zone> zones = new ArrayList<>();
+    ArrayList<Thing> things = new ArrayList<>();
 
-     int size = 500; 
-     int thickness = 5;
+    int size = 700;
+    int thickness = 10;
 
-     walls.add(new Wall(0, 0, thickness, size));
-     walls.add(new Wall(0, 0, size, thickness));
-     walls.add(new Wall(0,size - thickness,size,thickness));
-     walls.add(new Wall(size - thickness,0,thickness,size));
-     
-     Start start = new Start(0,220,60,60);
-     Goal goal = new Goal(440,220,60,60);
-     
-     zones.add(goal);
-     zones.add(start);
-     
-     if(mode.equals("PVP") || mode.equals("PVM")) {
-    	    things.add(new YellowCoin(400, 100, 20, 20, 1));
-    	    things.add(new YellowCoin(400, 100, 20, 20, 2));
-    	}
-    	else {
-    	    things.add(new YellowCoin(400, 100, 20, 20));
-    }
-     
-     Guard guard = new Guard(400, 100,20,20,1,100,500);
-     
-     things.add(guard);
-     
-     for(int i = 0; i < players.size(); i++) {
-    	    Player p = players.get(i);
+    walls.add(new Wall(0,0,size,thickness));
+    walls.add(new Wall(0,0,thickness,size));
+    walls.add(new Wall(0,size-thickness,size,thickness));
+    walls.add(new Wall(size-thickness,0,thickness,size));
+    walls.add(new Wall(125,0,thickness,size-190));
+    walls.add(new Wall(590,200,thickness,size));
+    walls.add(new Wall(0,50,1000,100));
+    walls.add(new Wall(0,550,1000,100));
 
-    	    if(i == 0) {
-    	        p.setRespawnX(20);
-    	        p.setRespawnY(240);
-    	        p.setX(20);
-    	        p.setY(240);
-    	    }
-    	    else {
-    	        p.setRespawnX(460);
-    	        p.setRespawnY(240);
-    	        p.setX(460);
-    	        p.setY(240);
-    	    }
-    	}
-     
-     actualLevel = new Level(walls, zones, things, size, size);
-     levels.add(actualLevel);
+    Start start = new Start(20,0,100,500);
+    Goal goal = new Goal(600,200,100,500);
+
+    zones.add(start);
+    zones.add(goal);
+    things.add(new Guard(200,200,20,20,1,200,500));
+    things.add(new Guard(300,500,20,20,1,200,500));
+    things.add(new Guard(400,200,20,20,1,200,500));
+    things.add(new Guard(500,500,20,20,1,200,500));
+    if(mode.equals("PVP") || mode.equals("PVM")) {
+	    things.add(new YellowCoin(400, 300, 20, 20, 1));
+	    things.add(new YellowCoin(400, 300, 20, 20, 2));
+	    zones.add(new Goal(20,450,100,50));
+	}
+	else {
+	    things.add(new YellowCoin(400, 300, 20, 20));
+	}
+    for(int i = 0; i < players.size(); i++) {
+	    Player p = players.get(i);
+
+	    if(i == 0) {
+	        p.setRespawnX(40);
+	        p.setRespawnY(280);
+	        p.setX(40);
+	        p.setY(280);
+	    }
+	    else {
+	        p.setRespawnX(620);
+	        p.setRespawnY(440);
+	        p.setX(620);
+	        p.setY(440);
+	    }
+	}
+
+    actualLevel = new Level(walls,zones,things,size,size);
+
+    levels.add(actualLevel);
 }
  
  public Level getActualLevel(){
