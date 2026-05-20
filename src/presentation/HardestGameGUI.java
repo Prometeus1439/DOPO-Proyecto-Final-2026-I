@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import domain.*;
+import java.io.File;
+
 
 public class HardestGameGUI extends JFrame {
 	
@@ -123,13 +125,14 @@ public class HardestGameGUI extends JFrame {
         selectionCharacterPanel.getBackButton().addActionListener(e -> showPanel("INSTRUCTIONS"));
         
         gamePanel.setExitToMainMenuAction(() -> showPanel("WELCOME"));
+        gamePanel.setSaveGameAction(() -> saveGame());
+        gamePanel.setLoadGameAction(() -> loadGame());
     } 
     
     private void showPanel(String name) {
-    	cardLayout.show(mainPanel, name);
-    	
-    	if (name.equals("GAME")) {
-            gamePanel.startGameTimer();
+        cardLayout.show(mainPanel, name);
+
+        if(name.equals("GAME")) {
             gamePanel.requestFocusInWindow();
         }
     }
@@ -172,11 +175,89 @@ public class HardestGameGUI extends JFrame {
                 playerTwoType = type;
                 hardestGame.startGame(selectedMode, playerOneType, playerTwoType);
                 showPanel("GAME");
+                gamePanel.startGameTimer();
             }
         }
         else {
-            hardestGame.startGame(selectedMode, type);
-            showPanel("GAME");
+        	hardestGame.startGame(selectedMode, type);
+
+        	showPanel("GAME");
+
+        	gamePanel.startGameTimer();
+        }
+    }
+    
+    private void saveGame() {
+
+        JFileChooser chooser =
+            new JFileChooser(new File("."));
+
+        chooser.setSelectedFile(
+            new File("hardestGame.dat")
+        );
+
+        if(chooser.showSaveDialog(this)
+                == JFileChooser.APPROVE_OPTION) {
+
+            try {
+
+                hardestGame.saveAs(
+                    chooser.getSelectedFile(),
+                    gamePanel.getRemainingSeconds()
+                );
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Game saved successfully"
+                );
+            }
+
+            catch(HGameException e) {
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage()
+                );
+            }
+        }
+    }
+    
+    private void loadGame() {
+
+        JFileChooser chooser =
+            new JFileChooser(new File("."));
+
+        if(chooser.showOpenDialog(this)
+                == JFileChooser.APPROVE_OPTION) {
+
+            try {
+
+                SavedGame save =
+                    HGame.importAs(
+                        chooser.getSelectedFile()
+                    );
+
+                hardestGame = save.getGame();
+
+                gamePanel.setHardestGame(hardestGame);
+
+                gamePanel.loadSavedGame(save);
+
+                showPanel("GAME");
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Game loaded successfully"
+                );
+            }
+
+            catch(HGameException e) {
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage()
+                );
+            }
         }
     }
     

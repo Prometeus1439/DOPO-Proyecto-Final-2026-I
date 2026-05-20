@@ -22,6 +22,9 @@ public class GamePanel extends GameScreenPanel {
     private static final int MOVEMENT_DELAY = 16;
     private Runnable exitToMainMenuAction;
 
+    private Runnable saveGameAction;
+    private Runnable loadGameAction;
+    
     private JPanel topPanel;
     private JPanel bottomPanel;
     private JPanel centerPanel;
@@ -279,8 +282,18 @@ public class GamePanel extends GameScreenPanel {
             if (exitToMainMenuAction != null) exitToMainMenuAction.run();
         });
 
-        saveItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Save feature in development"));
-        loadItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Load feature in development"));
+        saveItem.addActionListener(e -> {
+            if(saveGameAction != null) {
+                saveGameAction.run();
+            }
+        });
+
+        loadItem.addActionListener(e -> {
+            if(loadGameAction != null) {
+                loadGameAction.run();
+            }
+        });
+        
         volumeUpItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Volume increased"));
         volumeDownItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Volume decreased"));
         quitItem.addActionListener(e -> System.exit(0));
@@ -421,4 +434,34 @@ public class GamePanel extends GameScreenPanel {
      JOptionPane.showMessageDialog(this, "Time is over!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
     }
     
+    public void setSaveGameAction(Runnable action) {
+        this.saveGameAction = action;
+    }
+
+    public void setLoadGameAction(Runnable action) {
+        this.loadGameAction = action;
+    }
+    
+    public SavedGame createSavedGame() {
+        return new SavedGame(hardestGame, remainingSeconds);
+    }
+
+    public void loadSavedGame(SavedGame savedGame) {
+        hardestGame = savedGame.getGame();
+        remainingSeconds = savedGame.getRemainingSeconds();
+
+        updateTimeLabel();
+        updateStatsLabel();
+
+        repaint();
+        requestFocusInWindow();
+    }
+    
+    public int getRemainingSeconds() {
+        return remainingSeconds;
+    }
+    
+    public void setHardestGame(HGame hardestGame) {
+        this.hardestGame = hardestGame;
+    }
 }

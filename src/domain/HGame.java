@@ -3,6 +3,13 @@ package domain;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class HGame implements Serializable {
 
@@ -200,5 +207,81 @@ public void level1() {
   return players;
   }
  
+ 
+ public void saveAs(File f, int remainingSeconds)
+	        throws HGameException {
+
+	    try {
+
+	        if(!f.getName().endsWith(".dat")) {
+	            f = new File(f.getAbsolutePath() + ".dat");
+	        }
+
+	        SavedGame save =
+	            new SavedGame(this, remainingSeconds);
+
+	        FileOutputStream fos =
+	            new FileOutputStream(f);
+
+	        ObjectOutputStream oos =
+	            new ObjectOutputStream(fos);
+
+	        oos.writeObject(save);
+
+	        oos.close();
+	        fos.close();
+	    }
+
+	    catch(FileNotFoundException e) {
+	        throw new HGameException(
+	            "Could not create the file"
+	        );
+	    }
+
+	    catch(IOException e) {
+	        throw new HGameException(
+	            "Error writing the file"
+	        );
+	    }
+	}
+ 
+ public static SavedGame importAs(File f)
+	        throws HGameException {
+
+	    try {
+
+	        FileInputStream fis =
+	            new FileInputStream(f);
+
+	        ObjectInputStream ois =
+	            new ObjectInputStream(fis);
+
+	        SavedGame save =
+	            (SavedGame) ois.readObject();
+
+	        ois.close();
+	        fis.close();
+
+	        return save;
+	    }
+
+	    catch(FileNotFoundException e) {
+	        throw new HGameException(
+	            "Save file not found"
+	        );
+	    }
+
+	    catch(IOException e) {
+	        throw new HGameException(
+	            "Error reading the file"
+	        );
+	    }
+
+	    catch(ClassNotFoundException e) {
+	        throw new HGameException(
+	            "Invalid save file"
+	        );
+	    }
+	}
 }
  
