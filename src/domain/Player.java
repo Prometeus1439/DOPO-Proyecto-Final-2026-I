@@ -12,7 +12,6 @@ public abstract class Player extends GameObject implements Serializable{
  private double speed = 2.0;
  private int width;
  private int height;
- private int lives;
  private Color currentColor;
  private PlayerType originalType;
  private PlayerType currentType;
@@ -21,17 +20,22 @@ public abstract class Player extends GameObject implements Serializable{
  private boolean finished;
  private int playerNumber;
  private int deaths;
+ private boolean tochedCheckPoint;
  
  
  public Player(PlayerType type, int x, int y, int width, int height) {
-  super(x,y, width, height);
-  originalType = type;
-  currentType = type;
-  applyCurrentType();
-  this.width = width;
-  this.height = height;
-  this.playerNumber = playerNumber;
- }
+	    super(x,y, width, height);
+
+	    originalType = type;
+	    currentType = type;
+
+	    this.width = width;
+	    this.height = height;
+
+	    this.tochedCheckPoint = false;
+
+	    applyCurrentType();
+	}
  
  public void move(Rectangle newHitbox) {
   this.x = (int) newHitbox.getX();
@@ -66,6 +70,14 @@ public abstract class Player extends GameObject implements Serializable{
  public void setSpeed(double speed) {
   this.speed = speed;
  }
+
+ public void setTouchedCheckPoint(boolean touched) {
+     this.tochedCheckPoint = touched;
+ }
+
+ public boolean getTouchedCheckPoint() {
+     return tochedCheckPoint;
+ }
  
  public double getSpeed() {
   return speed;
@@ -73,17 +85,20 @@ public abstract class Player extends GameObject implements Serializable{
  
  public void setWidth(int width) {
   this.width = width;
+  this.hitbox.width = width;
  }
- 
+
  public int getWidth() {
   return width;
  }
+
  public int getHeight() {
   return height;
  }
- 
+
  public void setHeight(int height) {
   this.height = height;
+  this.hitbox.height = height;
  }
  public int getX() {
   return hitbox.x;
@@ -92,13 +107,16 @@ public abstract class Player extends GameObject implements Serializable{
   return hitbox.y;
  }
  public void setPlayerNumber(int playerNumber) {
-	    this.playerNumber = playerNumber;
+     this.playerNumber = playerNumber;
 }
  public int getPlayerNumber() {
-	 return playerNumber;
+  return playerNumber;
 }
- public void setInmune (boolean inm) {
-  inmunne=inm;
+ public void setInmune(boolean inm) {
+  inmunne = inm;
+ }
+ public boolean isInmune() {
+  return inmunne;
  }
  public void setFinished(boolean finished) {
   this.finished=finished;
@@ -131,10 +149,31 @@ public abstract class Player extends GameObject implements Serializable{
   return yRespawn;
  } 
 public void addDeath() {
-	 deaths++;
+  deaths++;
 }
 public int getDeaths() {
-	return deaths;
+ return deaths;
+}
+public void receiveDamage() {
+    life--;
+
+    if(currentType instanceof GreenSkin && life == 1) {
+        speed = speed * 0.5;
+    }
+}
+
+public void respawn() {
+    hitbox.x = xRespawn;
+    hitbox.y = yRespawn;
+
+    x = xRespawn;
+    y = yRespawn;
+
+    score = 0;
+
+    resetType();
+
+    setInmune(true);
 }
 
 }

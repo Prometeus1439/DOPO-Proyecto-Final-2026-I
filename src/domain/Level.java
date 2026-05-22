@@ -38,15 +38,42 @@ public class Level implements Serializable {
   return true;
  }
 
+ public boolean allCoinsCollected(Player p) {
+  for (Thing t : things) {
+   if (!(t instanceof Coin)) continue;
+   Coin c = (Coin) t;
+   if (c.getOwnerPlayer() == -1 || c.getOwnerPlayer() == p.getPlayerNumber()) {
+    if (!c.isCollected()) return false;
+   }
+  }
+  return true;
+ }
+
  public void resetCoins() {
   for (Thing t : things) {
    if (t instanceof Coin) t.reset();
   }
  }
+ 
+ public void resetCoins(int ownerPlayer) {
+
+	    for(Thing t : things) {
+
+	        if(t instanceof Coin) {
+
+	            Coin coin = (Coin) t;
+
+	            if(coin.getOwnerPlayer() == ownerPlayer) {
+	                coin.reset();
+	            }
+	        }
+	    }
+	}
 
  public void checkZone(Player p) {
   for (Zone z : zones) {
-   if (z instanceof Goal && !allCoinsCollected()) continue;
+   if (z instanceof Goal && !allCoinsCollected(p)) continue;
+   if (z.getOwnerPlayer() != -1 && z.getOwnerPlayer() != p.getPlayerNumber()) continue;
    if (z.isTriggered(p.getHitbox())) {
     z.effect(p);
    }

@@ -150,7 +150,7 @@ public class HardestGameGUI extends JFrame {
             System.exit(0);
         }
         else{
-            requestFocusInWindow();
+            SwingUtilities.invokeLater(() -> gamePanel.resumeGame());
         }
     }
     

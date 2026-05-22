@@ -19,12 +19,15 @@ public class HGame implements Serializable {
  private ArrayList<Level> levels;
  private Level actualLevel;
  
+ private GameState state;
+ 
  private String mode;
  private int deaths;
 
  public HGame() {
   players = new ArrayList<>();
   levels = new ArrayList<>();
+  state = new PausedState();
  }
 
  public int getDeaths() {	
@@ -36,10 +39,12 @@ public class HGame implements Serializable {
 	 
 	 players.clear();
 	 levels.clear();
+	 deaths = 0;
 	  
 	 createPlayer("human", 1, playerType);
 	  
 	 level1();
+	 state = new PlayingState();
 } 
  
  public void startGame(String mode, PlayerType playerOneType, PlayerType playerTwoType) {
@@ -59,9 +64,15 @@ public class HGame implements Serializable {
 	    }
 
 	    level1();
+	    state = new PlayingState();
 	}
  
  public void move(char direction, int player) {
+	 
+  if(!canMove()) {
+	  return;
+  }
+  
   int dx = 0;
   int dy = 0;
   Player p= players.get(player);
@@ -113,26 +124,93 @@ public class HGame implements Serializable {
  }
  
  public void tictac() {
-  if (actualLevel == null) return;
-  actualLevel.moveThings();
-  for(Player p: players) {
-   actualLevel.checkZone(p);
-   actualLevel.checkThing(p);
-   actualLevel.checkScenarioItems(p);
-   if(p.getLife()==0) {
-    deaths++;
-    p.addDeath();
-    
-    p.setLife(1);
-    p.setX(p.getRespawnX());
-    p.setY(p.getRespawnY());
-    
-    p.setScore(0);
-    
-    actualLevel.resetCoins();
-    }
-   }
-}
+
+	    if(!state.canMove()) {
+	        return;
+	    }
+
+	    if(actualLevel == null) {
+	        return;
+	    }
+
+	    actualLevel.moveThings();
+
+	    if(mode.equals("PVP") || mode.equals("PVM")) {
+	        checkPlayerCollision();
+	    }
+
+	    for(Player p : players) {
+
+	        actualLevel.checkZone(p);
+	        actualLevel.checkThing(p);
+	        actualLevel.checkScenarioItems(p);
+
+	        if(p.getLife() == 0) {
+
+	            deaths++;
+	            p.addDeath();
+
+	            p.respawn();
+
+	            if(mode.equals("PVP") || mode.equals("PVM")) {
+	                actualLevel.resetCoins(p.getPlayerNumber());
+	            }
+	            else {
+	                actualLevel.resetCoins();
+	            }
+
+	            new java.util.Timer().schedule(
+	                new java.util.TimerTask() {
+
+	                    @Override
+	                    public void run() {
+	                        p.setInmune(false);
+	                    }
+	                },
+	                1000
+	            );
+	        }
+	    }
+	}
+ 
+ private void checkPlayerCollision() {
+
+	    for(int i = 0; i < players.size(); i++) {
+
+	        Player p1 = players.get(i);
+
+	        for(int j = i + 1; j < players.size(); j++) {
+
+	            Player p2 = players.get(j);
+
+	            if(p1.getLife() <= 0 || p2.getLife() <= 0) {
+	                continue;
+	            }
+
+	            if(p1.getHitbox().intersects(p2.getHitbox())) {
+	            	System.out.println("Players collided");
+	                damageByCollision(p1);
+	                damageByCollision(p2);
+	            }
+	            
+	            
+	        }
+	    }
+	}
+ 
+ private void damageByCollision(Player p) {
+
+	    System.out.println(
+	        "Player " + p.getPlayerNumber() +
+	        " life: " + p.getLife() +
+	        " immune: " + p.isInmune()
+	    );
+
+	    if(!p.isInmune()) {
+	        p.setLife(0);
+	        System.out.println("Player " + p.getPlayerNumber() + " died");
+	    }
+	}
  
  public int getPlayerDeaths(int index) {
 	 return players.get(index).getDeaths();
@@ -170,11 +248,16 @@ public void level1() {
     things.add(new Guard(400,200,20,20,1,200,500));
     things.add(new Guard(500,500,20,20,1,200,500));
     if(mode.equals("PVP") || mode.equals("PVM")) {
-	    things.add(new YellowCoin(400, 300, 20, 20, 1));
-	    things.add(new YellowCoin(400, 300, 20, 20, 2));
-	    zones.add(new Goal(20,450,100,50));
+        zones.add(new Start(20, 0, 100, 500, 1));
+        zones.add(new Goal(20, 0, 100, 500, 2));
+        zones.add(new Goal(600, 200, 100, 500, 1));
+        zones.add(new Start(600, 200, 100, 500, 2));
+        things.add(new YellowCoin(200, 300, 20, 20, 1));
+        things.add(new YellowCoin(400, 300, 20, 20, 2));
 	}
 	else {
+		zones.add(new Start(20, 0, 100, 500));
+        zones.add(new Goal(600, 200, 100, 500));
 	    things.add(new YellowCoin(400, 300, 20, 20));
 	}
     for(int i = 0; i < players.size(); i++) {
@@ -282,6 +365,40 @@ public void level1() {
 	            "Invalid save file"
 	        );
 	    }
+	}
+ 
+ public void pause() {
+	 if(state == null) {
+	        state = new PausedState();
+	        return;
+	    }
+
+	    if(state.canPause()) {
+	        state = new PausedState();
+	    }
+	}
+
+	public void resume() {
+		if(state == null) {
+	        state = new PlayingState();
+	        return;
+	    }
+
+	    if(state.canResume()) {
+	        state = new PlayingState();
+	    }
+	}
+
+	public void finish() {
+	    state = new FinishedState();
+	}
+
+	public boolean canMove() {
+		return state != null && state.canMove();
+	}
+
+	public boolean isFinished() {
+	    return state.isFinished();
 	}
 }
  

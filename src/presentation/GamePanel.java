@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import domain.*;
 import javax.swing.Timer;
+import javax.swing.event.*;
 import java.util.*;
 
 public class GamePanel extends GameScreenPanel {
@@ -17,6 +18,7 @@ public class GamePanel extends GameScreenPanel {
     private Timer movementTimer;
     private Set<Integer> pressedKeys = new HashSet<>();
     private boolean gameOver = false;
+    private boolean exitingGame = false;
     private int remainingSeconds;
     private static final int INITIAL_TIME = 600;
     private static final int MOVEMENT_DELAY = 16;
@@ -167,7 +169,26 @@ public class GamePanel extends GameScreenPanel {
             int y = thing.getY() + (int)(panelH/2) - (int)(levelH/2);
             g.setColor(thing.getColor());
             g.fillOval(x, y, width, height);
+            if (thing instanceof Coin) {
+                Color borderColor = getPlayerColor(((Coin) thing).getOwnerPlayer());
+                if (borderColor != null) {
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setColor(borderColor);
+                    g2.setStroke(new BasicStroke(2));
+                    g2.drawOval(x, y, width, height);
+                    g2.setStroke(new BasicStroke(1));
+                }
+            }
         }
+    }
+    
+    private Color getPlayerColor(int playerNumber) {
+        for (Player p : hardestGame.getPlayers()) {
+            if (p.getPlayerNumber() == playerNumber) {
+                return p.getCurrentType().getColor();
+            }
+        }
+        return null;
     }
 
     private void drawWalls(Graphics g) {
@@ -271,24 +292,54 @@ public class GamePanel extends GameScreenPanel {
         gameMenu.add(quitItem);
 
         resumeItem.addActionListener(e -> {
+        	hardestGame.resume();
+        	
             if (gameTimer != null) gameTimer.start();
             if (movementTimer != null) movementTimer.start();
+            
             requestFocusInWindow();
         });
         
         exitToMenuItem.addActionListener(e -> {
-            if (gameTimer != null) gameTimer.stop();
-            if (movementTimer != null) movementTimer.stop();
-            if (exitToMainMenuAction != null) exitToMainMenuAction.run();
+
+            exitingGame = true;
+
+            if(gameTimer != null) {
+                gameTimer.stop();
+            }
+
+            if(movementTimer != null) {
+                movementTimer.stop();
+            }
+
+            if(exitToMainMenuAction != null) {
+                exitToMainMenuAction.run();
+            }
         });
 
         saveItem.addActionListener(e -> {
+
             if(saveGameAction != null) {
                 saveGameAction.run();
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Game saved. The game will resume in 3 seconds."
+                );
+
+                Timer resumeDelay = new Timer(3000, event -> {
+                    resumeGame();
+                });
+
+                resumeDelay.setRepeats(false);
+                resumeDelay.start();
             }
         });
 
         loadItem.addActionListener(e -> {
+
+            exitingGame = true;
+
             if(loadGameAction != null) {
                 loadGameAction.run();
             }
@@ -298,6 +349,47 @@ public class GamePanel extends GameScreenPanel {
         volumeDownItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Volume decreased"));
         quitItem.addActionListener(e -> System.exit(0));
         
+        gameMenu.addPopupMenuListener(new PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {}
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                if(!exitingGame) {
+                    resumeGame();
+                }
+
+                exitingGame = false;
+            }
+        });
+
+    }
+
+    public void resumeGame() {
+
+        if(gameOver) {
+            return;
+        }
+
+        hardestGame.resume();
+
+        pressedKeys.clear();
+
+        if(gameTimer != null && !gameTimer.isRunning()) {
+            gameTimer.start();
+        }
+
+        if(movementTimer != null && !movementTimer.isRunning()) {
+            movementTimer.start();
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            requestFocusInWindow();
+        });
     }
     
     private void prepareActions(){
@@ -317,18 +409,27 @@ public class GamePanel extends GameScreenPanel {
         });
 
         movementTimer = new Timer(MOVEMENT_DELAY, e -> {
-            if (!pressedKeys.isEmpty()) {
-                processMovement();
+
+            if(hardestGame.canMove()) {
+                if(!pressedKeys.isEmpty()) {
+                    processMovement();
+                }
+
+                hardestGame.tictac();
             }
-            hardestGame.tictac();
+
             checkGameState();
             repaint();
         });
+        
         movementTimer.start();
 
         menuButton.addActionListener(e -> {
+        	hardestGame.pause();
+
             if (gameTimer != null) gameTimer.stop();
             if (movementTimer != null) movementTimer.stop();
+
             pressedKeys.clear();
             gameMenu.show(menuButton, 0, menuButton.getHeight());
         });
@@ -380,6 +481,8 @@ public class GamePanel extends GameScreenPanel {
 
                 if(gameTimer != null) gameTimer.stop();
                 if(movementTimer != null) movementTimer.stop();
+                
+                hardestGame.finish();
 
                 JOptionPane.showMessageDialog(
                     this,
@@ -430,8 +533,29 @@ public class GamePanel extends GameScreenPanel {
     }
     
     private void gameOverByTime() {
-     
-     JOptionPane.showMessageDialog(this, "Time is over!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
+        gameOver = true;
+
+        hardestGame.finish();
+
+        if(gameTimer != null) {
+            gameTimer.stop();
+        }
+
+        if(movementTimer != null) {
+            movementTimer.stop();
+        }
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Time is over!",
+            "Game Over",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+        if(exitToMainMenuAction != null) {
+            exitToMainMenuAction.run();
+        }
     }
     
     public void setSaveGameAction(Runnable action) {
@@ -447,14 +571,39 @@ public class GamePanel extends GameScreenPanel {
     }
 
     public void loadSavedGame(SavedGame savedGame) {
+        if(gameTimer != null) {
+        	gameTimer.stop();
+        }
+        
+        if(movementTimer != null) {
+        	movementTimer.stop();
+        }
+
+        pressedKeys.clear();
+        gameOver = false;
+
         hardestGame = savedGame.getGame();
         remainingSeconds = savedGame.getRemainingSeconds();
 
+        hardestGame.pause();
+
         updateTimeLabel();
         updateStatsLabel();
-
         repaint();
-        requestFocusInWindow();
+
+        JOptionPane.showMessageDialog(this, "The game will resume in 3 seconds.");
+
+        Timer graceTimer = new Timer(3000, e -> {
+            hardestGame.resume();
+
+            if(gameTimer != null) gameTimer.start();
+            if(movementTimer != null) movementTimer.start();
+
+            requestFocusInWindow();
+        });
+
+        graceTimer.setRepeats(false);
+        graceTimer.start();
     }
     
     public int getRemainingSeconds() {

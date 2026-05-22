@@ -17,6 +17,10 @@ public class Coin extends Thing implements Serializable {
 	    this.ownerPlayer = ownerPlayer;
 	}
 	
+	public int getOwnerPlayer() {
+	     return ownerPlayer;
+	 }
+	
 	public void touch(Player p) {
 	    if(ownerPlayer == -1 || p.getPlayerNumber() == ownerPlayer) {
 	        p.setScore(p.getScore() + 1);
