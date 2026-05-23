@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Coin extends Thing implements Serializable {
 	
-	private int ownerPlayer;
+	protected int ownerPlayer;
 	
 	public Coin(int x, int y, int width, int height) {
 	    super(x, y, width, height);

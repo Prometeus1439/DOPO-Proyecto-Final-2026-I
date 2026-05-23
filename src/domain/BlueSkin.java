@@ -14,7 +14,7 @@ public class BlueSkin implements PlayerType, Serializable{
  
  @Override
  public Color getColor() {
-  return Color.BLUE;
+  return Color.CYAN;
  }
 }
  

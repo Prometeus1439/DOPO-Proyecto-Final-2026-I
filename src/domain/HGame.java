@@ -239,11 +239,14 @@ public void level1() {
         zones.add(new Start(600, 200, 100, 500, 2));
         things.add(new YellowCoin(200, 300, 20, 20, 1));
         things.add(new YellowCoin(400, 300, 20, 20, 2));
+        things.add(new SkinCoin(200, 150, 20, 20, new BlueSkin(), 1));
+        things.add(new SkinCoin(400, 150, 20, 20, new BlueSkin(), 2));
 	}
 	else {
 		zones.add(new Start(20, 0, 100, 500));
         zones.add(new Goal(600, 200, 100, 500));
 	    things.add(new YellowCoin(400, 300, 20, 20));
+	    things.add(new SkinCoin(200, 300, 20, 20, new BlueSkin()));
 	}
     for(int i = 0; i < players.size(); i++) {
 	    Player p = players.get(i);
