@@ -159,17 +159,6 @@ public class HGame implements Serializable {
 	            else {
 	                actualLevel.resetCoins();
 	            }
-
-	            new java.util.Timer().schedule(
-	                new java.util.TimerTask() {
-
-	                    @Override
-	                    public void run() {
-	                        p.setInmune(false);
-	                    }
-	                },
-	                1000
-	            );
 	        }
 	    }
 	}
@@ -241,8 +230,8 @@ public void level1() {
         zones.add(new Start(600, 200, 100, 500, 2));
         things.add(new YellowCoin(200, 300, 20, 20, 1));
         things.add(new YellowCoin(400, 300, 20, 20, 2));
-        things.add(new SkinCoin(200, 150, 20, 20, new BlueSkin(), 1));
-        things.add(new SkinCoin(400, 150, 20, 20, new BlueSkin(), 2));
+        things.add(new SkinCoin(200, 150, 20, 20, new GreenSkin(), 1));
+        things.add(new SkinCoin(400, 150, 20, 20, new GreenSkin(), 2));
         items.add(new LifeSource(300, 150, 20, 20));
 	}
 	else {

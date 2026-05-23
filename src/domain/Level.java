@@ -9,8 +9,8 @@ public class Level implements Serializable {
  private ArrayList<Zone> zones;
  private ArrayList<Thing> things;
  private ArrayList<Wall> walls;
- private static int width;
- private static int height;
+ private int width;
+ private int height;
  
  public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things,ArrayList<ScenarioItem> item,int width, int height) {
   this.walls=walls;
@@ -29,8 +29,12 @@ public class Level implements Serializable {
   }
   return true;
  }
- public void start() {
-  
+ public void start(ArrayList<Player> players) {
+	 resetCoins();
+	 
+	 for(Player p : players) {
+		 p.respawn();
+	 }
  }
  public boolean allCoinsCollected() {
   for (Thing t : things) {

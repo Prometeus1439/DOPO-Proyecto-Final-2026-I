@@ -23,9 +23,9 @@ public class CharacterSelectionPanel extends GameScreenPanel {
     	title = new JLabel("SELECT CHARACTER", JLabel.CENTER);
         GUIStyle.styleTitle(title);
 
-        characterOneButton = new JButton("<html><center>RED<br>NORMAL</center></html>");
-        characterTwoButton = new JButton("<html><center>GREEN<br>EXTRA LIFE</center></html>");
-        characterThreeButton = new JButton("<html><center>BLUE<br>FAST & SMALL</center></html>");
+        characterOneButton = new JButton("<html><center>BLINKY<br>NORMAL STATISTICS.</center></html>");
+        characterTwoButton = new JButton("<html><center>CLYDE<br>EXTRA LIFE. SPEED REDUCES AFTER THE FIRST HIT.</center></html>");
+        characterThreeButton = new JButton("<html><center>INKY<br>FASTER & BIGGER THAN THE OTHER TWO PLAYERS.</center></html>");
         
         backButton = new JButton("BACK");
 

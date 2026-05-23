@@ -144,9 +144,12 @@ public class GamePanel extends GameScreenPanel {
             int y = zone.getY() + (int)(panelH/2) - (int)(levelH/2);
 
             if (zone instanceof Start) {
-                g.setColor(new Color(100, 200, 100));
+                g.setColor(Color.GREEN);
             } else if (zone instanceof Goal) {
-                g.setColor(new Color(255, 215, 0));
+                g.setColor(Color.GREEN);
+            }
+            else {
+            	g.setColor(Color.GREEN);
             }
 
             g.fillRect(x, y, width, height);

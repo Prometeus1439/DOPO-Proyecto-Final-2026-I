@@ -12,7 +12,6 @@ public abstract class Player extends GameObject implements Serializable{
  private double speed = 2.0;
  private int width;
  private int height;
- private Color currentColor;
  private PlayerType originalType;
  private PlayerType currentType;
  private boolean inmunne;
@@ -20,7 +19,7 @@ public abstract class Player extends GameObject implements Serializable{
  private boolean finished;
  private int playerNumber;
  private int deaths;
- private boolean tochedCheckPoint;
+ private boolean touchedCheckPoint;
 
  private long lastDamageTime = 0;
  private static final long DAMAGE_COOLDOWN_MS = 800;
@@ -36,7 +35,7 @@ public abstract class Player extends GameObject implements Serializable{
 	    this.width = width;
 	    this.height = height;
 
-	    this.tochedCheckPoint = false;
+	    this.touchedCheckPoint = false;
 
 	    applyCurrentType();
 	}
@@ -60,7 +59,7 @@ public abstract class Player extends GameObject implements Serializable{
  
  private void applyCurrentType() {
   currentType.apply(this);
-  currentColor = currentType.getColor();
+  currentType.getColor();
  }
  
  public PlayerType getCurrentType() {
@@ -76,11 +75,11 @@ public abstract class Player extends GameObject implements Serializable{
  }
 
  public void setTouchedCheckPoint(boolean touched) {
-     this.tochedCheckPoint = touched;
+     this.touchedCheckPoint = touched;
  }
 
  public boolean getTouchedCheckPoint() {
-     return tochedCheckPoint;
+     return touchedCheckPoint;
  }
  
  public double getSpeed() {

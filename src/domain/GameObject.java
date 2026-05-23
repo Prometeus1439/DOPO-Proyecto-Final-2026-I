@@ -9,9 +9,10 @@ protected int y;
 protected Rectangle hitbox;
 
 public GameObject(int x, int y, int width, int height) {
-	this.hitbox=new Rectangle (x, y, width, height);
-	x=hitbox.x;
-	y=hitbox.y;
+	this.x = x;
+    this.y = y;
+
+    hitbox = new Rectangle(x, y, width, height);
 }
 public int getX() {
 	return hitbox.x;

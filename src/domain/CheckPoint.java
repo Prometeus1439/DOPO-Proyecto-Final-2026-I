@@ -9,5 +9,7 @@ public class CheckPoint extends Zone implements Serializable {
 	public void effect(Player p) {
 		p.setRespawnX(hitbox.x);
 		p.setRespawnY(hitbox.y);
+		
+		p.setTouchedCheckPoint(true);
 	}
 }
