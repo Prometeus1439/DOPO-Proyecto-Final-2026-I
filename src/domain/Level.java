@@ -129,5 +129,23 @@ public class Level implements Serializable {
  public int getWidth() {
   return width;
  }
+ 
+ public void checkScenarioItemsForGuards() {
+     for (Thing t : things) {
+         if (t.isCollected()) continue;
+         if (t instanceof Obstacle) {
+        	 Obstacle o = (Obstacle) t;
+             for (ScenarioItem s : scenarioItems) {
+            	 if(s.isCollected()) {
+            		 continue;
+            	 }
+                 if (o.getHitbox().intersects(s.hitbox)) {
+                     s.effect(o);
+                 }
+             }
+         }
+     }
+ }
+ 
 }
  

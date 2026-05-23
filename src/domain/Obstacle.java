@@ -13,5 +13,9 @@ public abstract class  Obstacle extends Thing implements Serializable{
 	 p.receiveDamage();
  }
  
+ public void eliminated() {
+	 collected = true;
+ }
+ 
 }
  

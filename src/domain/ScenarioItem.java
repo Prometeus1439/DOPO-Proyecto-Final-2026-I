@@ -19,4 +19,7 @@ public ScenarioItem(int x, int y, int width, int height) {
  public boolean isCollected() {
 	 return collected;
  }
+ 
+ public void effect(Obstacle o) {};
+ 
 }

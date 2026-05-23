@@ -134,6 +134,7 @@ public class HGame implements Serializable {
 	    }
 
 	    actualLevel.moveThings();
+	    actualLevel.checkScenarioItemsForGuards();
 
 	    if(mode.equals("PVP") || mode.equals("PVM")) {
 	        checkPlayerCollision();
@@ -250,6 +251,7 @@ public void level1() {
 	    things.add(new YellowCoin(400, 300, 20, 20));
 	    things.add(new SkinCoin(200, 300, 20, 20, new BlueSkin()));
 	    items.add(new LifeSource(300, 150, 20, 20));
+	    items.add(new Bomb(200, 500, 20, 20));
 	}
     for(int i = 0; i < players.size(); i++) {
 	    Player p = players.get(i);
