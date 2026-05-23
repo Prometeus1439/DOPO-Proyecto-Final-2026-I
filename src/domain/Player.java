@@ -21,6 +21,10 @@ public abstract class Player extends GameObject implements Serializable{
  private int playerNumber;
  private int deaths;
  private boolean tochedCheckPoint;
+
+ private long lastDamageTime = 0;
+ private static final long DAMAGE_COOLDOWN_MS = 800;
+
  
  
  public Player(PlayerType type, int x, int y, int width, int height) {
@@ -155,9 +159,11 @@ public int getDeaths() {
  return deaths;
 }
 public void receiveDamage() {
-    if(!this.inmunne) {
-    	life--;
-    }
+	long now = System.currentTimeMillis();
+    if (inmunne || (now - lastDamageTime) < DAMAGE_COOLDOWN_MS) return;
+
+    lastDamageTime = now;
+    life--;
 
     if(currentType instanceof GreenSkin && life == 1) {
         speed = speed * 0.5;
