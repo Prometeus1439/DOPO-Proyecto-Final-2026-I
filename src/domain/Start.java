@@ -12,5 +12,10 @@ public class Start extends Zone implements Serializable{
  public void effect(Player p) {
   p.setInmune(true);
  }
+ 
+ public void onExit(Player p) {
+	  p.setInmune(false);
+}
+ 
 }
  

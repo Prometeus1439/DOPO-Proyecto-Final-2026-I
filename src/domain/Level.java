@@ -77,6 +77,9 @@ public class Level implements Serializable {
    if (z.isTriggered(p.getHitbox())) {
     z.effect(p);
    }
+   else {
+	   z.onExit(p);
+   }
   }
  }
  public void moveThings() {

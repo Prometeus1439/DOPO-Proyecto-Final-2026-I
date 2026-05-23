@@ -155,7 +155,9 @@ public int getDeaths() {
  return deaths;
 }
 public void receiveDamage() {
-    life--;
+    if(!this.inmunne) {
+    	life--;
+    }
 
     if(currentType instanceof GreenSkin && life == 1) {
         speed = speed * 0.5;
@@ -172,8 +174,7 @@ public void respawn() {
     score = 0;
 
     resetType();
-
-    setInmune(true);
+    
 }
 
 }

@@ -188,27 +188,12 @@ public class HGame implements Serializable {
 	            }
 
 	            if(p1.getHitbox().intersects(p2.getHitbox())) {
-	            	System.out.println("Players collided");
-	                damageByCollision(p1);
-	                damageByCollision(p2);
+	            	p1.receiveDamage();
+	            	p2.receiveDamage();
 	            }
 	            
 	            
 	        }
-	    }
-	}
- 
- private void damageByCollision(Player p) {
-
-	    System.out.println(
-	        "Player " + p.getPlayerNumber() +
-	        " life: " + p.getLife() +
-	        " immune: " + p.isInmune()
-	    );
-
-	    if(!p.isInmune()) {
-	        p.setLife(0);
-	        System.out.println("Player " + p.getPlayerNumber() + " died");
 	    }
 	}
  

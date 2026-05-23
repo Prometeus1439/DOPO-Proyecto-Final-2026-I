@@ -20,7 +20,9 @@ public abstract class Zone extends GameObject implements Serializable{
  }
 
  public abstract void effect(Player p);
-
+ 
+ public void onExit(Player p) {};
+ 
  public boolean isTriggered(java.awt.Rectangle playerHitbox) {
   return hitbox.intersects(playerHitbox);
  }
