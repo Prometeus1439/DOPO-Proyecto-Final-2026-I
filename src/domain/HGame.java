@@ -210,6 +210,7 @@ public void level1() {
     ArrayList<Wall> walls = new ArrayList<>();
     ArrayList<Zone> zones = new ArrayList<>();
     ArrayList<Thing> things = new ArrayList<>();
+    ArrayList<ScenarioItem> items = new ArrayList<>();
 
     int size = 700;
     int thickness = 10;
@@ -241,12 +242,14 @@ public void level1() {
         things.add(new YellowCoin(400, 300, 20, 20, 2));
         things.add(new SkinCoin(200, 150, 20, 20, new BlueSkin(), 1));
         things.add(new SkinCoin(400, 150, 20, 20, new BlueSkin(), 2));
+        items.add(new LifeSource(300, 150, 20, 20));
 	}
 	else {
 		zones.add(new Start(20, 0, 100, 500));
         zones.add(new Goal(600, 200, 100, 500));
 	    things.add(new YellowCoin(400, 300, 20, 20));
 	    things.add(new SkinCoin(200, 300, 20, 20, new BlueSkin()));
+	    items.add(new LifeSource(300, 150, 20, 20));
 	}
     for(int i = 0; i < players.size(); i++) {
 	    Player p = players.get(i);
@@ -265,7 +268,7 @@ public void level1() {
 	    }
 	}
 
-    actualLevel = new Level(walls,zones,things,size,size);
+    actualLevel = new Level(walls,zones,things,items,size,size);
 
     levels.add(actualLevel);
 }

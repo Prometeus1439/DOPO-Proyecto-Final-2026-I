@@ -121,6 +121,7 @@ public class GamePanel extends GameScreenPanel {
            drawThings(g);
            drawWalls(g);
            drawPlayer(g);
+           drawScenarioItems(g);
           }
         };
         
@@ -231,6 +232,23 @@ public class GamePanel extends GameScreenPanel {
      }
     }
 
+    private void drawScenarioItems(Graphics g) {
+    	ArrayList<ScenarioItem> items = hardestGame.getActualLevel().getScenarioItems();
+    	 
+        int panelW = centerPanel.getWidth();
+        int panelH = centerPanel.getHeight();
+        int levelW = hardestGame.getActualLevel().getWidth();
+        int levelH = hardestGame.getActualLevel().getHeight();
+   
+        for (ScenarioItem item : items) {
+        	if (item.isCollected()) continue;
+            int x = item.getX() + panelW/2 - levelW/2;
+            int y = item.getY() + panelH/2 - levelH/2;
+            g.setColor(item.getColor());
+            g.fillRect(x, y, item.getHitbox().width, item.getHitbox().height);
+        }
+    }
+    
     private void updateStatsLabel() {
 
         int playerCount = hardestGame.getPlayers().size();

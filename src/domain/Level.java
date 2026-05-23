@@ -12,14 +12,15 @@ public class Level implements Serializable {
  private static int width;
  private static int height;
  
- public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things, int width, int height) {
+ public Level(ArrayList<Wall> walls ,ArrayList<Zone> zones,ArrayList<Thing> things,ArrayList<ScenarioItem> item,int width, int height) {
   this.walls=walls;
   this.zones=zones;
   this.things=things;
-  this.scenarioItems = new ArrayList<>();
+  this.scenarioItems = item;
   this.width = width;
   this.height = height;
  }
+ 
  public boolean isWall(Rectangle ghost) {
   for(Wall w: walls) {
    if(ghost.intersects(w.hitbox)) {
@@ -98,6 +99,9 @@ public class Level implements Serializable {
  }
  public void checkScenarioItems(Player p) {
   for(ScenarioItem s: scenarioItems) {
+	  if(s.isCollected()) {
+		  continue;
+	  }
    if(p.getHitbox().intersects(s.hitbox)) {
     s.effect(p);
    }
